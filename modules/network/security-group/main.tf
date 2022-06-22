@@ -1,5 +1,5 @@
 locals {
-  computed_name = format("%s-%s-%s-%s", var.context.company, var.context.organization, var.context.project, var.context.enivronment)
+  computed_name = format("%s-%s-%s-%s", var.company, var.organization, var.project, var.enivronment)
   rules_map     = { for i, rule in var.security_group_rules : tostring(i) => rule }
   ingress_keys  = compact([for i, rule in local.rules_map : rule.type == "ingress" ? i : ""])
   egress_keys   = compact([for i, rule in local.rules_map : rule.type == "egress" ? i : ""])
@@ -8,11 +8,7 @@ locals {
   all_egress_rules  = [for key in local.rules_map : lookup(local.rules_map, key)]
 
   tags = {
-    Company      = upper(var.context.company)
-    Organization = upper(var.context.organization)
-    Project      = upper(var.context.project)
-    Enivronment  = upper(var.context.enivronment)
-    Region       = var.aws_region
+    Region = var.aws_region
   }
 
   tags_all = merge(local.tags, var.tags)
@@ -69,9 +65,3 @@ resource "aws_security_group" "this" {
     delete = var.delete_timeout
   }
 }
-
-# Outputs
-# arn
-# id
-# owner_id
-# tags_all

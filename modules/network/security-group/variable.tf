@@ -1,20 +1,28 @@
 # ----------------------------------------------
 # Common Variables
 # ----------------------------------------------
-variable "context" {
-  description = "Naming/Project context"
-  type = object({
-    company      = string
-    organization = string
-    project      = string
-    enivronment  = string
-  })
-  default = {
-    company      = "mnr"
-    enivronment  = "poc"
-    organization = "analytics"
-    project      = "aas"
-  }
+variable "company" {
+  description = "Company name"
+  type        = string
+  default     = "acme"
+}
+
+variable "organization" {
+  description = "Business organization or system name within the company"
+  type        = string
+  default     = "bi"
+}
+
+variable "environment" {
+  description = "Environment name e.g., 'dev', 'stage', 'prod', 'uat', 'poc'"
+  type        = string
+  default     = "poc"
+}
+
+variable "project" {
+  description = "Project/code name with in the organization"
+  type        = string
+  default     = "aap"
 }
 
 variable "aws_region" {
@@ -52,9 +60,8 @@ variable "description" {
 }
 
 variable "vpc_id" {
-  description = "VPC id the security group belongs to"
+  description = "(Mandatory) VPC id the security group belongs to"
   type        = string
-  default     = null
 }
 
 variable "revoke_rules_on_delete" {
