@@ -1,24 +1,17 @@
 locals {
-  computed_name = format("%s-%s-%s-%s", var.company, var.organization, var.project, var.enivronment)
-  rules_map     = { for i, rule in var.security_group_rules : tostring(i) => rule }
-  ingress_keys  = compact([for i, rule in local.rules_map : rule.type == "ingress" ? i : ""])
-  egress_keys   = compact([for i, rule in local.rules_map : rule.type == "egress" ? i : ""])
+  rules_map    = { for i, rule in var.sg_rules : tostring(i) => rule }
+  ingress_keys = compact([for i, rule in local.rules_map : rule.type == "ingress" ? i : ""])
+  egress_keys  = compact([for i, rule in local.rules_map : rule.type == "egress" ? i : ""])
 
   all_ingress_rules = [for key in local.rules_map : lookup(local.rules_map, key)]
   all_egress_rules  = [for key in local.rules_map : lookup(local.rules_map, key)]
-
-  tags = {
-    Region = var.aws_region
-  }
-
-  tags_all = merge(local.tags, var.tags)
 }
 
-resource "aws_security_group" "this" {
+resource "aws_security_group" "default" {
   count = var.create_resource ? 1 : 0
 
-  name        = var.name != null ? var.name : "${local.computed_name}-sg"
-  description = var.description
+  name        = var.sg_name
+  description = var.sg_description
 
   vpc_id = var.vpc_id
 
@@ -58,7 +51,7 @@ resource "aws_security_group" "this" {
     }
   }
 
-  tags = local.tags_all
+  tags = var.tags
 
   timeouts {
     create = var.create_timeout

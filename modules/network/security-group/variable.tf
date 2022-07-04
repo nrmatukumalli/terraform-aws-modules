@@ -1,31 +1,7 @@
 # ----------------------------------------------
 # Common Variables
 # ----------------------------------------------
-variable "company" {
-  description = "Company name"
-  type        = string
-  default     = "acme"
-}
-
-variable "organization" {
-  description = "Business organization or system name within the company"
-  type        = string
-  default     = "bi"
-}
-
-variable "environment" {
-  description = "Environment name e.g., 'dev', 'stage', 'prod', 'uat', 'poc'"
-  type        = string
-  default     = "poc"
-}
-
-variable "project" {
-  description = "Project/code name with in the organization"
-  type        = string
-  default     = "aap"
-}
-
-variable "aws_region" {
+variable "region" {
   description = "AWS region to deploy resources"
   type        = string
   default     = "us-east-1"
@@ -47,13 +23,13 @@ variable "create_resource" {
   default     = true
 }
 
-variable "name" {
+variable "sg_name" {
   description = "Name of the resources"
   type        = string
   default     = null
 }
 
-variable "description" {
+variable "sg_description" {
   description = "Security group description"
   type        = string
   default     = "Manged by Terraform"
@@ -70,7 +46,7 @@ variable "revoke_rules_on_delete" {
   default     = false
 }
 
-variable "security_group_rules" {
+variable "sg_rules" {
   description = "security group rules to be added to the security group"
   type = list(object({
     type               = string

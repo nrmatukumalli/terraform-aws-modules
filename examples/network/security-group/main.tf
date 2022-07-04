@@ -1,5 +1,5 @@
 provider "aws" {
-  region = "us-east-1"
+  region = local.region
 }
 
 terraform {
@@ -12,27 +12,30 @@ terraform {
   }
 }
 
+locals {
+  region = "us-east-1"
+  tags = {
+    Owner   = "Veera V Nageswara Rao"
+    Company = "ACME"
+  }
+}
+
 module "sg" {
-  source = "github.com/myawsanalytics/terraform-aws-modules//modules/network/security-group"
+  source = "../../../modules/network/security-group"
 
   create_resource = true
+  region          = local.region
 
-  company      = "acme"
-  organization = "bi"
-  environment  = "poc"
-  project      = "aap"
+  sg_name        = "default-sg"
+  sg_description = "Managed By Terraform"
+  sg_rules       = []
 
-  aws_region = "us-east-1"
+  revoke_rules_on_delete = true
 
   vpc_id = ""
-
-  name                   = null
-  description            = "Managed By Terraform"
-  revoke_rules_on_delete = true
-  security_group_rules   = []
 
   create_timeout = "10m"
   delete_timeout = "15m"
 
-  tags = {}
+  tags = local.tags
 }
